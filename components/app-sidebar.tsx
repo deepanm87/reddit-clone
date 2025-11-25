@@ -1,11 +1,12 @@
-import * as React from "react"
-import { FlameIcon, HomeIcon, Minus, Plus, TrendingUpIcon } from "lucide-react"
-import { SearchForm } from "@/components/search-form"
+import * as React from "react";
+import { FlameIcon, HomeIcon, Minus, Plus, TrendingUpIcon } from "lucide-react";
+
+import { SearchForm } from "@/components/search-form";
 import {
   Collapsible,
   CollapsibleContent,
   CollapsibleTrigger,
-} from "@/components/ui/collapsible"
+} from "@/components/ui/collapsible";
 import {
   Sidebar,
   SidebarContent,
@@ -18,38 +19,46 @@ import {
   SidebarMenuSubButton,
   SidebarMenuSubItem,
   SidebarRail,
-} from "@/components/ui/sidebar"
-import Image from "next/image"
-import ReddishLogo from "@/images/Reddish Full.png"
-import Link from "next/link"
+} from "@/components/ui/sidebar";
+import Image from "next/image";
+import ReddishLogo from "@/images/Reddish Full.png";
+import Link from "next/link";
+import { getSubreddits } from "@/sanity/lib/subreddit/getSubreddits";
+/* import CreateCommunityButton from "./header/CreateCommunityButton"; */
 
 type SidebarData = {
   navMain: {
-    title: string
-    url: string
+    title: string;
+    url: string;
     items: {
-      title: string
-      url: string
-      isActive: boolean
-    }[]
-  }[]
-}
+      title: string;
+      url: string;
+      isActive: boolean;
+    }[];
+  }[];
+};
 
-export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+export async function AppSidebar({
+  ...props
+}: React.ComponentProps<typeof Sidebar>) {
+  // TODO: get all subreddits from sanity
+  const subreddits = await getSubreddits();
 
-  const sideBarData: SidebarData = {
+  // This is sample data.
+  const sidebarData: SidebarData = {
     navMain: [
       {
         title: "Communities",
         url: "#",
-        items: {
-          title: "unknown",
-          url: `/community`,
-          isActive: false
-        }
-      }
-    ]
-  }
+        items:
+          subreddits?.map(subreddit => ({
+            title: subreddit.title || "unknown",
+            url: `/community/${subreddit.slug}`,
+            isActive: false,
+          })) || [],
+      },
+    ],
+  };
 
   return (
     <Sidebar {...props}>
@@ -58,7 +67,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
           <SidebarMenuItem>
             <SidebarMenuButton size="lg" asChild>
               <Link href="/">
-                <Image 
+                <Image
                   src={ReddishLogo}
                   alt="logo"
                   width={150}
@@ -75,6 +84,10 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         <SidebarGroup>
           <SidebarMenu>
             <SidebarMenuItem>
+              <SidebarMenuButton asChild>
+               {/* <CreateCommunityButton /> */}
+              </SidebarMenuButton>
+
               <SidebarMenuButton asChild className="p-5">
                 <Link href="/">
                   <HomeIcon className="w-4 h-4 mr-2" />
@@ -86,22 +99,21 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                 <Link href="/popular">
                   <TrendingUpIcon className="w-4 h-4 mr-2" />
                   Popular
-                </Link>  
+                </Link>
               </SidebarMenuButton>
-
               <SidebarMenuButton asChild className="p-5">
                 <Link href="/hot">
                   <FlameIcon className="w-4 h-4 mr-2" />
                   Hot/Controversial
-                </Link>  
-              </SidebarMenuButton>              
-            </SidebarMenuItem>          
+                </Link>
+              </SidebarMenuButton>
+            </SidebarMenuItem>
           </SidebarMenu>
         </SidebarGroup>
 
         <SidebarGroup>
           <SidebarMenu>
-            {sideBarData.navMain.map((item, index) => (
+            {sidebarData.navMain.map((item, index) => (
               <Collapsible
                 key={item.title}
                 defaultOpen={index === 1}
@@ -118,7 +130,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                   {item.items?.length ? (
                     <CollapsibleContent>
                       <SidebarMenuSub>
-                        {item.items.map(item => (
+                        {item.items.map((item) => (
                           <SidebarMenuSubItem key={item.title}>
                             <SidebarMenuSubButton
                               asChild
@@ -139,5 +151,5 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       </SidebarContent>
       <SidebarRail />
     </Sidebar>
-  )
+  );
 }

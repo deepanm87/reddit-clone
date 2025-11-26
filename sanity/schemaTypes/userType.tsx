@@ -46,14 +46,7 @@ export const userType = defineType({
   preview: {
     select: {
       title: "username",
-      media: "imageUrl"
-    },
-    prepare({ title, media }) {
-      return {
-        title,
-        // Return plain data (no JSX) so the CLI can extract schema in Node
-        media: media || undefined,
-      }
+      media: "email"
     }
   }
 })

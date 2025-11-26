@@ -62,6 +62,9 @@ importers:
       react-dom:
         specifier: 19.2.0
         version: 19.2.0(react@19.2.0)
+      react-timeago:
+        specifier: ^8.3.0
+        version: 8.3.0(react@19.2.0)
       sanity:
         specifier: ^4.18.0
         version: 4.18.0(@emotion/is-prop-valid@1.2.2)(@portabletext/sanity-bridge@1.2.5(@sanity/schema@4.18.0(@types/react@19.2.7)(debug@4.4.3))(@sanity/types@4.18.0(@types/react@19.2.7)))(@types/node@20.19.25)(@types/react-dom@19.2.3(@types/react@19.2.7))(@types/react@19.2.7)(immer@11.0.0)(jiti@2.6.1)(lightningcss@1.30.2)(react-dom@19.2.0(react@19.2.0))(react@19.2.0)(styled-components@6.1.19(react-dom@19.2.0(react@19.2.0))(react@19.2.0))(typescript@5.9.3)(yaml@2.8.1)
@@ -5491,6 +5494,11 @@ packages:
     peerDependenciesMeta:
       '@types/react':
         optional: true
+
+  react-timeago@8.3.0:
+    resolution: {integrity: sha512-BeR0hj/5qqTc2+zxzBSQZMky6MmqwOtKseU3CSmcjKR5uXerej2QY34v2d+cdz11PoeVfAdWLX+qjM/UdZkUUg==}
+    peerDependencies:
+      react: ^16.0.0 || ^17.0.0 || ^18.0.0 || ^19.0.0
 
   react@19.2.0:
     resolution: {integrity: sha512-tmbWg6W31tQLeB5cdIBOicJDJRR2KzXsV7uSK9iNfLWQ5bIZfxuPEHp7M8wiHyHnn0DD1i7w3Zmin0FtkrwoCQ==}
@@ -12482,6 +12490,10 @@ snapshots:
       tslib: 2.8.1
     optionalDependencies:
       '@types/react': 19.2.7
+
+  react-timeago@8.3.0(react@19.2.0):
+    dependencies:
+      react: 19.2.0
 
   react@19.2.0: {}
 

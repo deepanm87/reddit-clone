@@ -10,18 +10,7 @@ export const structure: StructureResolver = (S) =>
       // add reported section
       S.listItem()
         .title("Reported")
-        .icon(() => {
-          return (
-            <span 
-              style={{ 
-                fontWeight: "bold", 
-                color: "red" 
-              }}
-            >
-              <Flag />
-            </span>
-          );
-        })
+        .icon(Flag) // Pass the component directly instead of a function returning JSX
         .child(
           S.list()
             .title("Reported Content to be reviewed")

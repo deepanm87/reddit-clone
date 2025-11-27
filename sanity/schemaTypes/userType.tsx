@@ -46,7 +46,7 @@ export const userType = defineType({
   preview: {
     select: {
       title: "username",
-      media: "email"
+      subtitle: "email"
     }
   }
 })

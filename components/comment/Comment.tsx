@@ -9,6 +9,7 @@ import React from "react"
 import TimeAgo from "../TimeAgo"
 import CommentList from "./CommentList"
 import CommentReply from "./CommentReply"
+import PostVoteButtons from "../post/PostVoteButtons"
 
 export default async function Comment({
   postId,
@@ -27,7 +28,12 @@ export default async function Comment({
   return (
     <article className="py-5 border-b border-gray-100 last:border-0">
       <div className="flex gap-4">
-
+        <PostVoteButtons 
+          contentId={comment._id}
+          votes={comment.votes}
+          vote={userVoteStatus}
+          contentType="comment"
+        />
 
         <div className="flex-1 space-y-2">
           <div className="flex flex-wrap items-center gap-2">

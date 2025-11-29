@@ -1,4 +1,4 @@
-This is a clone of Reddit.
+This is a clone of Reddit. The live URL: https://reddit-clone-self-ten.vercel.app/
 
 The home page shows all the available posts belonging to particular communities.
 

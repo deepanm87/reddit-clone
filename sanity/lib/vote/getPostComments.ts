@@ -3,7 +3,7 @@ import { sanityFetch } from "../live"
 
 export async function getPostComments(postId: string, userId: string | null) {
   const getPostCommentsQuery = defineQuery(`
-      *[_type == "comment" && post._ref == $postId && !defined(parentComment)] {
+      *[_type == "comment" && post._ref == $postId && !defined(parentComment) && isDeleted != true] {
         ...,
         _id,
         content,

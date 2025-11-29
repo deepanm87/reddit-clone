@@ -3,6 +3,7 @@
 import { adminClient } from "@/sanity/lib/adminClient"
 import { getPostById } from "@/sanity/lib/post/getPostById"
 import { currentUser } from "@clerk/nextjs/server"
+import { revalidatePath } from "next/cache"
 
 export const deletePost = async (postId: string) => {
   const user = await currentUser()
@@ -15,32 +16,38 @@ export const deletePost = async (postId: string) => {
     return { error: "Post not found" }
   }
 
-  if (post.author?._id !== user?.id) {
+  if (post.author?._id !== user.id) {
     return { error: "You are not authorized to delete this post" }
   }
 
-  const patch = adminClient.patch(postId)
+  try {
+    const patch = adminClient.patch(postId)
 
-  if (post.image?.asset?._ref) {
-    patch.set({ image: null })
-  }
-
-  patch.set({ isDeleted: true })
-
-  patch.set({
-    body: [{ children: [{ text: "[DELETED CONTENTS]" }], type: "paragraph" }]
-  })
-
-  patch.set({ title: "[DELETED POST]" })
-
-  const result = await patch.commit()
-
-  if (result) {
-    await new Promise(resolve => setTimeout(resolve, 1000))
+    // Unset the image
     if (post.image?.asset?._ref) {
-      await adminClient.delete(post.image.asset._ref)
+      patch.unset(["image"])
     }
-  }
 
-  return { success: "Post deleted successfully" }
+    // Mark post as deleted (hidden from queries)
+    patch.set({ isDeleted: true })
+
+    const result = await patch.commit()
+
+    // Delete the image asset after marking post as deleted
+    if (result && post.image?.asset?._ref) {
+      try {
+        await adminClient.delete(post.image.asset._ref)
+      } catch (error) {
+        console.error(`Error deleting image asset: ${error}`)
+      }
+    }
+
+    // Revalidate paths to refresh the UI
+    revalidatePath("/", "layout")
+
+    return { success: "Post deleted successfully" }
+  } catch (error) {
+    console.error(`Error deleting post: ${error}`)
+    return { error: "Failed to delete post" }
+  }
 }

@@ -33,11 +33,11 @@ export function SubredditCombobox({
   const [open, setOpen] = useState(false)
   const [value, setValue] = useState(defaultValue)
 
-  const handleSelect = (currentValue: string) => {
-    setValue(currentValue)
+  const handleSelect = (slug: string) => {
+    setValue(slug)
     setOpen(false)
-    if (currentValue) {
-      router.push(`create-post?subreddit=${currentValue}`)
+    if (slug) {
+      router.push(`create-post?subreddit=${slug}`)
     } else {
       router.push(`/create-post`)
     }
@@ -53,7 +53,7 @@ export function SubredditCombobox({
           className="w-full justify-between"
         >
           {value
-            ? subreddits.find(subreddit => subreddit.title === value)
+            ? subreddits.find(subreddit => subreddit.slug === value)
               ?.title || "Select a community"
             : "Select a community"
           }
@@ -69,13 +69,13 @@ export function SubredditCombobox({
               {subreddits.map(subreddit => (
                 <CommandItem
                   key={subreddit._id}
-                  value={subreddit.title ?? ""}
+                  value={subreddit.slug ?? ""}
                   onSelect={handleSelect}
                 >
                   <Check 
                     className={cn(
                       "mr-2 h-4 w-4",
-                      value === subreddit.title ? "opacity-100" : "opacity-0"
+                      value === subreddit.slug ? "opacity-100" : "opacity-0"
                     )}
                   />
                   {subreddit.title}

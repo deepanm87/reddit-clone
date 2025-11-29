@@ -2,6 +2,7 @@
 
 import { addComment } from "@/sanity/lib/comment/addComment"
 import { getUser } from "@/sanity/lib/user/getUser"
+import { revalidatePath } from "next/cache"
 
 export async function createComment(
   postId: string,
@@ -21,6 +22,9 @@ export async function createComment(
       content,
       parentCommentId
     })
+
+    // Revalidate all paths that might display this post and its comments
+    revalidatePath("/", "layout")
 
     return { comment }
   } catch (error) {

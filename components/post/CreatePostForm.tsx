@@ -65,11 +65,10 @@ export default function CreatePostForm() {
         imageContentType: fileType
       })
 
-      resetForm()
-
       if ("error" in result && result.error) {
         setErrorMessage(result.error)
       } else {
+        resetForm()
         router.push(`/community/${subreddit}`)
       }
     } catch (error) {

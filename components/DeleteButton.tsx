@@ -3,6 +3,7 @@
 import { deleteComment } from "@/actions/deleteComment"
 import { deletePost } from "@/actions/deletePost"
 import { useUser } from "@clerk/nextjs"
+import { useRouter } from "next/navigation"
 import { Trash2 } from "lucide-react"
 import { useState } from "react"
 
@@ -20,6 +21,7 @@ export default function DeleteButton({
   const [isDeleting, setIsDeleting] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const { isSignedIn, user } = useUser()
+  const router = useRouter()
 
   const handleDelete = async () => {
     if (isDeleting || !isSignedIn) {
@@ -40,7 +42,10 @@ export default function DeleteButton({
 
       if (response.error) {
         setError(response.error)
-      } 
+      } else {
+        // Refresh the page to see the changes
+        router.refresh()
+      }
     } catch (error) {
       setError("Failed to delete. Please try again.")
       console.error(`Failed to delete ${contentType}: ${error}`)

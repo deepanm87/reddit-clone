@@ -3,7 +3,7 @@ import { sanityFetch } from "../live"
 
 export async function getPostsForSubreddit(id: string) {
   const getPostsForSubredditQuery = defineQuery(`
-      *[_type == "post" && subreddit._ref == $id] {
+      *[_type == "post" && subreddit._ref == $id && isDeleted != true] {
         ...,
         "slug": slug.current,
         "author": author->,

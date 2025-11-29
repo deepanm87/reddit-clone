@@ -1,6 +1,7 @@
 "use client"
 
 import { useState, useTransition } from "react"
+import { useRouter } from "next/navigation"
 import { useUser } from "@clerk/nextjs"
 import { Input } from "../ui/input"
 import { Button } from "../ui/button"
@@ -16,6 +17,7 @@ export default function CommentInput({
   const [content, setContent] = useState("")
   const [isPending, startTransition] = useTransition()
   const { user } = useUser()
+  const router = useRouter()
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
@@ -28,6 +30,8 @@ export default function CommentInput({
           console.error(`Error adding comment: ${result.error}`)
         } else {
           setContent("")
+          // Refresh the page to show the new comment
+          router.refresh()
         }
       } catch (error) {
         console.error(`Failed to add comment: ${error}`)

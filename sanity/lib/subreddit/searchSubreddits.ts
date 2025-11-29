@@ -7,7 +7,7 @@ export async function searchSubreddits(searchTerm: string) {
   }
 
   const searchSubredditsQuery = 
-    defineQuery(`*[_type == "subreddit" && title match $searchTerm + "*"] {
+    defineQuery(`*[_type == "subreddit" && lower(title) match lower($searchTerm) + "*"] {
         _id,
         title,
         "slug": slug.current,
@@ -19,7 +19,7 @@ export async function searchSubreddits(searchTerm: string) {
 
   const results = await sanityFetch({
     query: searchSubredditsQuery,
-    params: { searchTerm: searchTerm.toLowerCase() }
+    params: { searchTerm: searchTerm.trim() }
   })
 
   return results.data

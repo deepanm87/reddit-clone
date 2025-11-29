@@ -10,6 +10,10 @@ import Image from "next/image"
 import { urlFor } from "@/sanity/lib/image"
 import { MessageSquare } from "lucide-react"
 import CommentInput from "../comment/CommentInput"
+import CommentList from "../comment/CommentList"
+import PostVoteButtons from "./PostVoteButtons"
+import ReportButton from "../ReportButton"
+import DeleteButton from "../DeleteButton"
 
 interface PostProps {
   post: 
@@ -29,6 +33,13 @@ export default async function Post({ post, userId }: PostProps) {
       className="relative bg-white rounded-md shadow-sm border border-gray-200 hover:border-gray-300 transition-colors"
     >
       <div className="flex">
+
+        <PostVoteButtons 
+          contentId={post._id}
+          votes={votes}
+          vote={vote}
+          contentType="post"
+        />
 
         <div className="flex-1 p-3">
           <div className="flex items-center gap-2 text-xs text-gray-500 mb-2">
@@ -89,7 +100,21 @@ export default async function Post({ post, userId }: PostProps) {
           </button>
 
           <CommentInput postId={post._id} />
- 
+          <CommentList postId={post._id} comments={comments} userId={userId} />
+        </div>
+      </div>
+
+      <div className="absolute top-2 right-2">
+        <div className="flex items-center gap-2">
+          <ReportButton contentId={post._id} />
+
+          {post.author?._id && (
+            <DeleteButton 
+              contentOwnerId={post.author?._id}
+              contentId={post._id}
+              contentType="post"
+            />
+          )}
         </div>
       </div>
     </article>

@@ -33,25 +33,35 @@ export async function createPost({
   imageContentType?: string | null
 }) {
   try {
+    console.log("createPost called with:", { title, subredditSlug })
+    
     if (!title || !subredditSlug) {
       return { error: "Title and subreddit are required" }
     }
 
+    console.log("Getting user...")
     const user = await getUser()
 
     if ("error" in user) {
+      console.error("User error:", user.error)
       return { error: user.error }
     }
 
+    console.log("User found:", user._id)
+    console.log("Getting subreddit:", subredditSlug)
     const subreddit = await getSubredditBySlug(subredditSlug)
 
     if (!subreddit?._id) {
+      console.error("Subreddit not found:", subredditSlug)
       return { error: `Subreddit "${subredditSlug}" not found`}
     }
+
+    console.log("Subreddit found:", subreddit._id)
 
     let imageAsset
     if (imageBase64 && imageFilename && imageContentType) {
       try {
+        console.log("Uploading image...")
         const base64Data = imageBase64.split(",")[1]
 
         const buffer = Buffer.from(base64Data, "base64")
@@ -60,11 +70,12 @@ export async function createPost({
           filename: imageFilename,
           contentType: imageContentType
         })
+        console.log("Image uploaded:", imageAsset._id)
       } catch (error) {
         console.error(`Error uploading image: ${error}`)
       }
     } else {
-
+      console.log("No image to upload")
     }
 
     const postDoc: Partial<Post> = {
@@ -75,6 +86,7 @@ export async function createPost({
           {
             _type: "block",
             _key: Date.now().toString(),
+            style: "normal",
             children: [
               {
                 _type: "span",
@@ -106,30 +118,37 @@ export async function createPost({
       }
     }
 
+    console.log("Creating post document:", postDoc)
     const post = await adminClient.create(postDoc as Post)
-    const messages: CoreMessage[] = [
-      {
-        role: "user",
-        content: `I posted this post -> Post ID: ${post._id}\nTitle: ${title}\nBody: ${body}`
-      }
-    ]
+    console.log("Post created successfully:", post._id)
+    
+    // Run content moderation asynchronously without blocking post creation
+    Promise.resolve().then(async () => {
+      try {
+        const messages: CoreMessage[] = [
+          {
+            role: "user",
+            content: `I posted this post -> Post ID: ${post._id}\nTitle: ${title}\nBody: ${body}`
+          }
+        ]
 
-    try {
-      const authContext = await auth.protect()
-      const toolkit = await createClerkToolkit({ authContext })
-      const result = await generateText({
-        model: openai("gpt-4.1-mini"),
-        messages: messages as CoreMessage[],
-        system: toolkit.injectSessionClaims(systemPrompt),
-        tools: {
-          ...toolkit.users(),
-          censorPost,
-          reportUser
-        }
-      })
-    } catch (error) {
-      console.error(`Error in content moderation: ${error}`)
-    }
+        const authContext = await auth.protect()
+        const toolkit = await createClerkToolkit({ authContext })
+        const result = await generateText({
+          model: openai("gpt-4.1-mini"),
+          messages: messages as CoreMessage[],
+          system: toolkit.injectSessionClaims(systemPrompt),
+          tools: {
+            ...toolkit.users(),
+            censorPost,
+            reportUser
+          }
+        })
+        console.log("Content moderation completed")
+      } catch (error) {
+        console.error(`Error in content moderation: ${error}`)
+      }
+    }).catch(err => console.error("Unexpected error in async moderation:", err))
 
     return { post }
   } catch (error) {

@@ -6,7 +6,7 @@ export async function getCommentReplies(
   userId: string | null
 ) {
   const getCommentRepliesQuery = defineQuery(`
-      *[_type == "comment" && parentComment._ref == $commentId] {
+      *[_type == "comment" && parentComment._ref == $commentId && isDeleted != true] {
         ...,
         _id,
         content,

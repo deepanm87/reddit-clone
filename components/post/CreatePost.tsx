@@ -16,7 +16,7 @@ export default function CreatePost() {
       : null
     
     if (communityName) {
-      router.push(`/create-post/subreddit=${communityName}`)
+      router.push(`/create-post?subreddit=${communityName}`)
     } else {
       router.push(`/create-post`)
     }

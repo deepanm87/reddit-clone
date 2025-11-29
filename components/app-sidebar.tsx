@@ -25,6 +25,7 @@ import ReddishLogo from "@/images/Reddish Full.png"
 import Link from "next/link"
 import { getSubreddits } from "@/sanity/lib/subreddit/getSubreddits"
 import CreateCommunityButton from "./header/createCommunityButton"
+import SubredditList from "@/components/subreddit/SubredditList"
 
 type SidebarData = {
   navMain: {
@@ -127,22 +128,12 @@ export async function AppSidebar({
                       <Minus className="ml-auto group-data-[state=closed]/collapsible:hidden" />
                     </SidebarMenuButton>
                   </CollapsibleTrigger>
-                  {item.items?.length ? (
-                    <CollapsibleContent>
-                      <SidebarMenuSub>
-                        {item.items.map((item) => (
-                          <SidebarMenuSubItem key={item.title}>
-                            <SidebarMenuSubButton
-                              asChild
-                              isActive={item.isActive}
-                            >
-                              <Link href={item.url}>{item.title}</Link>
-                            </SidebarMenuSubButton>
-                          </SidebarMenuSubItem>
-                        ))}
-                      </SidebarMenuSub>
-                    </CollapsibleContent>
-                  ) : null}
+                            {item.items?.length ? (
+                              <CollapsibleContent>
+                                {/* Render subreddit list client-side so we can detect the active route */}
+                                <SubredditList subreddits={subreddits} />
+                              </CollapsibleContent>
+                            ) : null}
                 </SidebarMenuItem>
               </Collapsible>
             ))}

@@ -1,7 +1,8 @@
 import { sanityFetch } from "../live"
 import { defineQuery } from "groq"
+import type { GetSubredditsQueryResult } from "@/sanity.types"
 
-export async function searchSubreddits(searchTerm: string) {
+export async function searchSubreddits(searchTerm: string): Promise<GetSubredditsQueryResult> {
   if (!searchTerm || searchTerm.trim() === "") {
     return []
   }
@@ -22,5 +23,5 @@ export async function searchSubreddits(searchTerm: string) {
     params: { searchTerm: searchTerm.trim() }
   })
 
-  return results.data
+  return results.data as GetSubredditsQueryResult
 }

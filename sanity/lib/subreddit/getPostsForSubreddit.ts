@@ -1,7 +1,8 @@
 import { defineQuery } from "next-sanity"
 import { sanityFetch } from "../live"
+import type { GetPostsForSubredditQueryResult } from "@/sanity.types"
 
-export async function getPostsForSubreddit(id: string) {
+export async function getPostsForSubreddit(id: string): Promise<GetPostsForSubredditQueryResult> {
   const getPostsForSubredditQuery = defineQuery(`
       *[_type == "post" && subreddit._ref == $id && isDeleted != true] {
         ...,
@@ -21,5 +22,5 @@ export async function getPostsForSubreddit(id: string) {
     params: { id }
   })
 
-  return result.data
+  return result.data as GetPostsForSubredditQueryResult
 }

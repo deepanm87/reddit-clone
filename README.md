@@ -1,36 +1,29 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+This is a clone of Reddit.
 
-## Getting Started
+The home page shows all the available posts belonging to particular communities.
 
-First, run the development server:
+<img width="2530" height="913" alt="Screenshot 2025-11-28 at 20 22 34" src="https://github.com/user-attachments/assets/8eb8c7dd-1e30-49e5-b0b4-5d22004f0388" />
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+It allows authentication via Clerk API.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+We can create new communities.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+<img width="746" height="647" alt="Screenshot 2025-11-28 at 20 24 41" src="https://github.com/user-attachments/assets/14dcb054-e2b3-4ecc-b7c4-efdd5e07c91e" />
 
-## Learn More
+We can also create a post from a community page or create a new one and select the community manually.
 
-To learn more about Next.js, take a look at the following resources:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
 
-## Deploy on Vercel
+<img width="1607" height="911" alt="Screenshot 2025-11-28 at 20 25 57" src="https://github.com/user-attachments/assets/3febbdbe-3368-4936-b3be-7489f4025c19" />
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Users can also write comments and delete their respective comments.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+It also has a search feature to search for communities.
+
+
+
+<img width="2346" height="756" alt="Screenshot 2025-11-28 at 20 27 10" src="https://github.com/user-attachments/assets/f4aad321-cb20-405b-98e1-8affa51256f1" />
+
+
